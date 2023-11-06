@@ -1,0 +1,25 @@
+{
+  "name": "qubic-ts-library",
+  "version": "0.0.1",
+  "description": "Typescript Library to communicate with the Qubic Network. http://qubic.li",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "devDependencies": {
+    "@types/chai": "^4.3.9",
+    "@types/mocha": "^10.0.3",
+    "chai": "^4.3.10",
+    "mocha": "^10.2.0",
+    "ts-loader": "^9.5.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "bignumber.js": "^9.1.2",
+    "net": "^1.0.2"
+  }
+}
