@@ -351,22 +351,22 @@ class QubicExchange {
    */
   async processTempWithdraw(user, entityResponse) {
     if (user.tempWithdrawTx.tick < entityResponse.tick) {
-      if(user.tempWithdrawTx.success){
-        if(entityResponse.entity.getBalance() == 0){
+      if (user.tempWithdrawTx.success) {
+        if (entityResponse.entity.getBalance() == 0) {
           // success. withdraw finished
           user.balance -= user.tempWithdrawTx.amount;
           user.tempWithdrawTx = undefined;
           user.tempWithdrawWallet = undefined;
-        }else{
+        } else {
           // transfer from hot to temp withdraw account success, send qubic to users address
           const txWatch = await this.createAndSendTransfer(user.tempWithdrawWallet.publicKey, new PublicKey(user.withdrawAddress), user.tempWithdrawTx.amount, user.tempWithdrawWallet.seed);
           txWatch.success = true;
           user.tempWithdrawTx = txWatch;
         }
-      }else if (entityResponse.entity.getBalance() >= user.tempWithdrawTx.amount) {
+      } else if (entityResponse.entity.getBalance() >= user.tempWithdrawTx.amount) {
         // withdraw is on temp account, sent to user
         user.tempWithdrawTx.success = true;
-      }else{
+      } else {
         // tx failed, resent it
         user.tempWithdrawTx = await this.createAndSendTransfer(this.config.hotWallet.publicKey, user.tempWithdrawWallet.publicKey, user.tempWithdrawTx.amount, this.config.hotWallet.seed);
       }
@@ -404,7 +404,7 @@ class QubicExchange {
         user.tempDepositTx = await this.createAndSendTransfer(user.depositWallet.publicKey, user.tempDepositWallet.publicKey, user.tempDepositTx.amount, user.depositWallet.seed);
       } else {
         // transfer from users deposit account to temp deposit was successful
-        user.tempDepositTx.success = true; 
+        user.tempDepositTx.success = true;
       }
       this.saveConfig();
     }
@@ -445,7 +445,7 @@ class QubicExchange {
     if (tempWithdrawUser)
       this.processTempWithdraw(tempWithdrawUser, entityResponse);
 
-    if(entityResponse.entity.publicKey.equals(this.config.hotWallet.publicKey))
+    if (entityResponse.entity.publicKey.equals(this.config.hotWallet.publicKey))
       this.config.hotWallet.balance = entityResponse.entity.getBalance();
 
   }
@@ -514,18 +514,18 @@ class QubicExchange {
   }
 
 
-  async startWithdraw(user, amount){
+  async startWithdraw(user, amount) {
 
-    if(this.config.hotWallet.balance < amount){
+    if (this.config.hotWallet.balance < amount) {
       this.logError("INSUFFICIENT FUND ON HOT WALLET");
       return;
     }
 
-    if(!user.tempWithdrawWallet){
+    if (!user.tempWithdrawWallet) {
       // initiate step one
       user.tempWithdrawWallet = await new Wallet().createWallet(this.seedGen());
       user.tempWithdrawTx = await this.createAndSendTransfer(this.config.hotWallet.publicKey, user.tempWithdrawWallet.publicKey, amount, this.config.hotWallet.seed);
-    }else{
+    } else {
       // wait for previous withdraw
       this.logError("ONLY ONE WITHDRAW ALLOWED")
     }
@@ -537,19 +537,18 @@ class QubicExchange {
   /***
    * simulates a withdraw
    */
-  simulateWithdraw(userId, amount){
+  simulateWithdraw(userId, amount) {
     const user = this.config.users.find(f => f.id === userId);
-    if(!user)
-    {
+    if (!user) {
       this.logError("USER NOT FOUND");
       return;
     }
 
-    if(user.balance < amount) {
+    if (user.balance < amount) {
       this.logError("NOT ENOUGH BALANCE");
       return;
     }
-    
+
     this.startWithdraw(user, amount);
   }
 }

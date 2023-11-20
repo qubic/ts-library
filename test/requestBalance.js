@@ -16,7 +16,7 @@ let start = new Date();
 const connector = new QubicConnector();
 connector.onBalance = (b) => {
   //console.log("Balance", b.entity);
-  if (b && b.entity && b.entity.incomingAmount && b.entity.outgoingAmount){
+  if (b && b.entity && b.entity.incomingAmount && b.entity.outgoingAmount) {
     totalValue += b.entity.getBalance();
   }
   receivedBalances++;
@@ -26,7 +26,6 @@ connector.onBalance = (b) => {
 };
 connector.onPeerConnected = () => {
   console.log("connected");
-  //connector.requestBalance(new PublicKey(ids[0]));
   ids.forEach(id => {
     connector.requestBalance(new PublicKey(id));
   });
@@ -51,5 +50,6 @@ connector.onTick = (p) => {
 }
 
 connector.connect(peerAddress);
+
 // todo: timeout
 
