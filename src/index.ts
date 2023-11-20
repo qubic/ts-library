@@ -25,7 +25,7 @@ import { RequestResponseHeader } from './qubic-communication/RequestResponseHead
 
 
 // crypto (base qubic library)
-import { crypto } from './crypto/index'
+import  crypto  from './crypto/index'
 
 export default {
     crypto,

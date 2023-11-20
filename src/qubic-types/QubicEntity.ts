@@ -19,7 +19,7 @@ export class QubicEntity implements IQubicBuildPackage {
     private _internalPackageSize = 64;
 
     private publicKey: PublicKey = new PublicKey();
-    private incomingAcmount: Long = new Long();
+    private incomingAmount: Long = new Long();
     private outgoingAmount: Long = new Long();
     private numberOfIncomingTransfers: number = 0;
     private numberOfOutgoingTransfers: number = 0;
@@ -34,12 +34,12 @@ export class QubicEntity implements IQubicBuildPackage {
         this.publicKey = publicKey;
     }
 
-    public getIncomingAcmount(): Long {
-        return this.incomingAcmount;
+    public getIncomingAmount(): Long {
+        return this.incomingAmount;
     }
 
-    public setIncomingAcmount(incomingAcmount: Long): void {
-        this.incomingAcmount = incomingAcmount;
+    public setIncomingAmount(incomingAcmount: Long): void {
+        this.incomingAmount = incomingAcmount;
     }
 
     public getOutgoingAmount(): Long {
@@ -87,7 +87,7 @@ export class QubicEntity implements IQubicBuildPackage {
     }
 
     public getBalance(): number {
-        return Number(this.getIncomingAcmount().getNumber() - this.getOutgoingAmount().getNumber());
+        return Number(this.getIncomingAmount().getNumber() - this.getOutgoingAmount().getNumber());
     }
 
     getPackageSize(): number {
@@ -104,7 +104,7 @@ export class QubicEntity implements IQubicBuildPackage {
         let offset = 0;
         this.setPublicKey(new PublicKey(data.slice(0, QubicDefinitions.PUBLIC_KEY_LENGTH)));
         offset += QubicDefinitions.PUBLIC_KEY_LENGTH;
-        this.setIncomingAcmount(new Long(dataView.getBigInt64(offset, true)));
+        this.setIncomingAmount(new Long(dataView.getBigInt64(offset, true)));
         offset += 8;
         this.setOutgoingAmount(new Long(dataView.getBigInt64(offset, true)));
         offset += 8;
@@ -122,7 +122,7 @@ export class QubicEntity implements IQubicBuildPackage {
     getPackageData(): Uint8Array {
         const builder = new QubicPackageBuilder(this._internalPackageSize);
         builder.add(this.publicKey);
-        builder.add(this.incomingAcmount);
+        builder.add(this.incomingAmount);
         builder.add(this.outgoingAmount);
         builder.addInt(this.numberOfIncomingTransfers);
         builder.addInt(this.numberOfOutgoingTransfers);

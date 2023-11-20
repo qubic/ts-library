@@ -8,14 +8,14 @@ export class RequestResponseHeader implements IQubicBuildPackage {
     /**
      * 
      * @param packageType type of the package to send (use QubicPackagetypes statics)
-     * @param packageSize size of the qubic package (header size is added automatically)
+     * @param payloadSize size of the qubic package (header size is added automatically)
      */
-    constructor(packageType: number | undefined = undefined, packageSize: number | undefined = undefined){
+    constructor(packageType: number | undefined = undefined, payloadSize: number | undefined = undefined){
         if(packageType !== undefined){
             this.setType(packageType)
         }
-        if(packageSize !== undefined){
-            this.setSize(packageSize + this.getPackageSize())
+        if(payloadSize !== undefined){
+            this.setSize(payloadSize + this.getPackageSize())
         }else {
             this.setSize(this.getPackageSize());
         }
