@@ -1,6 +1,7 @@
 import { KeyHelper } from "../keyHelper";
 import { IQubicBuildPackage } from "./IQubicBuildPackage";
 import { QubicDefinitions } from "../QubicDefinitions";
+import { QubicHelper } from "../qubicHelper";
 
 export class PublicKey implements IQubicBuildPackage {
     private bytes: Uint8Array = new Uint8Array(QubicDefinitions.PUBLIC_KEY_LENGTH).fill(0);
@@ -19,8 +20,10 @@ export class PublicKey implements IQubicBuildPackage {
         this.setIdentity(KeyHelper.getIdentityBytes(id));
     }
 
-    setIdentity(bytes: Uint8Array) {
+    async setIdentity(bytes: Uint8Array) {
         this.bytes = bytes;
+        // convert byte to id
+        this.identity = await new QubicHelper().getIdentity(bytes);
     }
 
     getIdentity() {
@@ -40,5 +43,9 @@ export class PublicKey implements IQubicBuildPackage {
 
     equals(compare: PublicKey): boolean {
       return compare && this.bytes.length === compare.bytes.length && this.bytes.every((value, index) => value === compare.bytes[index]);
+    }
+
+    async verifyIdentity() {
+        return await new QubicHelper().verifyIdentity(this.identity);
     }
 }

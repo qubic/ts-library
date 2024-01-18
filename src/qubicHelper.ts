@@ -51,6 +51,7 @@ THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 import crypto from './crypto'
 import { seedStringToBytes, digestBytesToString, publicKeyStringToBytes, publicKeyBytesToString } from './converter/converter.js';
 import BigNumber from 'bignumber.js';
+import { QubicDefinitions } from './QubicDefinitions';
 
 
 // todo: refactor
@@ -67,47 +68,48 @@ export class QubicHelper {
     private PUBLIC_KEY_LENGTH = 32;
     private SEED_IN_LOWERCASE_LATIN_LENGTH = 55;
     private CHECKSUM_LENGTH = 3;
-    private HEX_CHARS_PER_BYTE = 2;
-    private HEX_BASE = 16;
-    private SHIFTED_HEX_CHARS_NEW = 'abcdefghijklmnopqrstuvwxyz';
-    private HEX_CHARS = '0123456789abcdef';
 
-    async createIdPackage(seed: string): Promise<{ publicKey: Uint8Array, privateKey: Uint8Array, publicId: string }> {
+    /**
+     * 
+     * Creates a complete ID Package based on the provided seed
+     * 
+     * @param seed 
+     * @returns 
+     */
+    public async createIdPackage(seed: string): Promise<{ publicKey: Uint8Array, privateKey: Uint8Array, publicId: string }> {
 
-        return crypto.then(({ schnorrq, K12 }) => {
-            return this.createIdentity(seed, 0).then(oldId => {
-                let privateKey = this.privateKey(seed, 0, K12);
-                let publicKey = schnorrq.generatePublicKey(privateKey)
-                let publicId = this.getNewId(this.getPublicKeyOld(oldId));
-                return { publicKey: publicKey, privateKey: privateKey, publicId: publicId };
-            });
-        });
+        const { schnorrq, K12 } = await crypto;
+
+        const privateKey = this.privateKey(seed, 0, K12);
+        const publicKey = schnorrq.generatePublicKey(privateKey);
+        const publicId = await this.getIdentity(publicKey);
+
+        return {publicKey, privateKey, publicId };
     }
 
-    getPublicKeyOld(identity: string): Uint8Array {
-        const bytes = this.shiftedHexToBytes(identity.toLowerCase());
-        return bytes;
+    /**
+     * creates the checksum for a given key
+     * 
+     * @param publicKey 
+     * @returns 
+     */
+    private async getCheckSum(publicKey: Uint8Array): Promise<Uint8Array> {
+        const { K12 } = await crypto;
+        const digest = new Uint8Array(QubicDefinitions.DIGEST_LENGTH);
+        K12(publicKey, digest, QubicDefinitions.DIGEST_LENGTH);
+        const checksum = digest.slice(0, this.CHECKSUM_LENGTH);
+        return checksum;
     }
 
-    shiftedHexToBytes(hex: string): Uint8Array {
-        if (hex.length % this.HEX_CHARS_PER_BYTE !== 0) {
-            hex = 'a' + hex;
-        }
-
-        const bytes = new Uint8Array(hex.length / this.HEX_CHARS_PER_BYTE);
-        for (let i = 0, c = 0; c < hex.length; c += this.HEX_CHARS_PER_BYTE) {
-            bytes[i++] = parseInt(
-                hex
-                    .substr(c, this.HEX_CHARS_PER_BYTE)
-                    .split('')
-                    .map((char: any) => this.HEX_CHARS[this.SHIFTED_HEX_CHARS.indexOf(char)])
-                    .join(''),
-                this.HEX_BASE
-            );
-        }
-        return bytes;
-    };
-    getNewId(publicKey: Uint8Array): string {
+    /**
+     * 
+     * Creates the human readable public key from the publickey
+     * 
+     * @param publicKey 
+     * @param lowerCase 
+     * @returns 
+     */
+    public async getIdentity(publicKey: Uint8Array, lowerCase: boolean = false): Promise<string> {
         let newId = '';
         for (let i = 0; i < 4; i++) {
             let longNUmber = new BigNumber(0);
@@ -116,58 +118,28 @@ export class QubicHelper {
                 longNUmber = longNUmber.plus(new BigNumber((val * 256 ** index).toString(2), 2));
             });
             for (let j = 0; j < 14; j++) {
-                newId += String.fromCharCode(longNUmber.mod(26).plus('A'.charCodeAt(0)).toNumber());
+                newId += String.fromCharCode(longNUmber.mod(26).plus((lowerCase ? 'a' : 'A').charCodeAt(0)).toNumber());
                 longNUmber = longNUmber.div(26);
             }
         }
-        let lastNumber = new BigNumber(0);
-        lastNumber.decimalPlaces(0);
-        publicKey.slice(32, 35).forEach((val, index) => {
-            lastNumber = lastNumber.plus(new BigNumber((val * 256 ** index).toString(2), 2));
-        });
-        lastNumber = new BigNumber(lastNumber.toNumber() & 0x3FFFF);
+        
+        // calculate checksum
+        const checksum = await this.getCheckSum(publicKey);
+
+        // convert to int
+        let identityBytesChecksum = (checksum[2] << 16) | (checksum[1] << 8) | checksum[0];
+        identityBytesChecksum = identityBytesChecksum & 0x3FFFF;
+        
         for (let i = 0; i < 4; i++) {
-            newId += String.fromCharCode(lastNumber.mod(26).plus('A'.charCodeAt(0)).toNumber());
-            lastNumber = lastNumber.div(26);
-        }
-        return newId;
-    }
-    getHumanReadableBytes(publicKey: Uint8Array): string {
-        let newId = '';
-        for (let i = 0; i < 4; i++) {
-            let longNUmber = new BigNumber(0);
-            longNUmber.decimalPlaces(0);
-            publicKey.slice(i * 8, (i + 1) * 8).forEach((val, index) => {
-                longNUmber = longNUmber.plus(new BigNumber((val * 256 ** index).toString(2), 2));
-            });
-            for (let j = 0; j < 14; j++) {
-                newId += String.fromCharCode(longNUmber.mod(26).plus('a'.charCodeAt(0)).toNumber());
-                longNUmber = longNUmber.div(26);
-            }
-        }
-        let lastNumber = new BigNumber(0);
-        lastNumber.decimalPlaces(0);
-        publicKey.slice(32, 35).forEach((val, index) => {
-            lastNumber = lastNumber.plus(new BigNumber((val * 256 ** index).toString(2), 2));
-        });
-        lastNumber = new BigNumber(lastNumber.toNumber() & 0x3FFFF);
-        for (let i = 0; i < 4; i++) {
-            newId += String.fromCharCode(lastNumber.mod(26).plus('a'.charCodeAt(0)).toNumber());
-            lastNumber = lastNumber.div(26);
+            newId += String.fromCharCode(identityBytesChecksum % 26 + (lowerCase ? 'a' : 'A').charCodeAt(0));
+            identityBytesChecksum = identityBytesChecksum / 26;
         }
         return newId;
     }
 
-
-
-
-    bytesToShiftedHex(bytes: any): string {
-        let hex = '';
-        for (let i = 0; i < bytes.length; i++) {
-            hex += this.SHIFTED_HEX_CHARS[bytes[i] >> 4] + this.SHIFTED_HEX_CHARS[bytes[i] & 15];
-        }
-        return hex;
-    };
+    async getHumanReadableBytes(publicKey: Uint8Array): Promise<string> {
+        return await this.getIdentity(publicKey, true);
+    }
 
     seedToBytes(seed: string): Uint8Array {
         const bytes = new Uint8Array(seed.length);
@@ -196,24 +168,36 @@ export class QubicHelper {
         return key;
     };
 
+    public getIdentityBytes = function (identity: string): Uint8Array {
+        const publicKeyBytes = new Uint8Array(32);
+        const view = new DataView(publicKeyBytes.buffer, 0);
 
-    async createIdentity(seed: string, index: number): Promise<string> {
-        if (!new RegExp(`^[a-z]{${this.SEED_IN_LOWERCASE_LATIN_LENGTH}}$`).test(seed)) {
-            throw new Error(
-                `Invalid seed. Must be ${this.SEED_IN_LOWERCASE_LATIN_LENGTH} lowercase latin chars.`
-            );
+        for (let i = 0; i < 4; i++) {
+            view.setBigUint64(i * 8, 0n, true);
+            for (let j = 14; j-- > 0;) {
+                view.setBigUint64(i * 8, view.getBigUint64(i * 8, true) * 26n + BigInt(identity.charCodeAt(i * 14 + j)) - BigInt('A'.charCodeAt(0)), true);
+            }
         }
 
-        if (!Number.isInteger(index) || index < 0) {
-            throw new Error('Illegal index.');
-        }
-        let that = this;
-        return crypto.then(function ({ schnorrq, K12 }) {
-            const privateKey = that.privateKey(seed, index, K12);
-            const publicKey = that.createPublicKey(privateKey, schnorrq, K12);
-            return that.bytesToShiftedHex(publicKey).toUpperCase();
-        });
+        return publicKeyBytes;
     };
+
+    /**
+     * Verifies if a given identity is valid
+     * @param identity 
+     */
+    public async verifyIdentity(identity: string): Promise<boolean> {
+
+        if(!identity || identity.length != 60 || !/^[A-Z]+$/.test(identity)) // must be 60 upper case characters
+            return false;
+
+        const publicKey = this.getIdentityBytes(identity);
+        const idFromBytes = await this.getIdentity(publicKey);
+
+        // todo: it would be enough to just check checksum bytes instead of compare complete id
+
+        return identity === idFromBytes;
+    }
 
     private createPublicKey(privateKey: Uint8Array, schnorrq: any, K12: any): Uint8Array {
         const publicKeyWithChecksum = new Uint8Array(this.PUBLIC_KEY_LENGTH + this.CHECKSUM_LENGTH);

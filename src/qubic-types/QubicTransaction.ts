@@ -115,12 +115,11 @@ export class QubicTransaction implements IQubicBuildPackage {
         builder.addShort(this.inputType);
         builder.addShort(this.inputSize);
         builder.add(this.payload);
-        return builder.signAndDigest(seed).then((result: {signedData: Uint8Array, digest: Uint8Array}) => {
-            this.builtData = result.signedData;
-            this.digest = result.digest;
-            this.id = new QubicHelper().getHumanReadableBytes(result.digest);
-            return result.signedData;
-        });;
+        const { signedData, digest} =  await builder.signAndDigest(seed);
+        this.builtData = signedData;
+        this.digest = digest;
+        this.id = await new QubicHelper().getHumanReadableBytes(digest);
+        return signedData;
     }
 
     getPackageData(): Uint8Array {
