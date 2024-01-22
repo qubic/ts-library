@@ -9,6 +9,7 @@ import { QubicPackageBuilder } from "./QubicPackageBuilder";
 import { QubicEntityRequest } from "./qubic-communication/QubicEntityRequest";
 import crypto from './crypto'
 import { KeyHelper } from "./keyHelper";
+import WebSocket from 'ws';
 
 declare function require(name: string);
 
@@ -43,7 +44,7 @@ export class QubicConnector {
     constructor(bridgeAddress) {
         this.isNodeJs = this.isNodeJsCheck();
         if (!this.isNodeJs) {
-            this.webSocket = new WebSocket(bridgeAddress || 'wss://1.b.qubic.li/'); // qli web bridge address
+            this.webSocket = new WebSocket(bridgeAddress || 'wss://webbridge.qubic.li/'); // qli web bridge address
         } else {
             // assume we are running in nodejs
             const net2 = require("net")

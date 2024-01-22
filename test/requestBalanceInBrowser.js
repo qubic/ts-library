@@ -1,9 +1,8 @@
 
 
-const { QubicConnector } = require('../dist/QubicConnectorNode');
+const { QubicConnector } = require('../dist/QubicConnector');
 const { QubicEntityResponse } = require('../dist/qubic-communication/QubicEntityResponse');
 const { PublicKey } = require('../dist/qubic-types/PublicKey');
-const { QubicEntity } = require('../dist/qubic-types/QubicEntity');
 const { QubicPackageType } = require('../dist/qubic-communication/QubicPackageType');
 
 const ids = ["AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"];
@@ -44,12 +43,21 @@ connector.onPeerDisconnected = () => {
 }
 connector.onReady = (p) => {
   console.log("ready", p);
+  
+  connector.connect(peerAddress);
 }
 connector.onTick = (p) => {
   console.log("tick received", p);
 }
 
-connector.connect(peerAddress);
+connector.onWsDisconnected = (p) => {
+  console.log("ws disconnected", p);
+}
+
+
+connector.start();
+
+
 
 // todo: timeout
 

@@ -16,7 +16,8 @@
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2",
     "webpack": "^5.89.0",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "ws": "^8.16.0"
   },
   "dependencies": {
     "bignumber.js": "^9.1.2",
