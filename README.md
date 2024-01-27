@@ -2,6 +2,23 @@
 
 A TS Library to communicate with the Qubic Network.
 
+## Usage
+Install via NPM.
+
+```bash
+yarn add qubic-ts-library
+```
+
+### TS Examples
+
+```ts
+// import helper
+import { QubicHelper } from 'qubic-ts-library/dist/qubicHelper'
+
+// create an id Package with private/public key and human readable address
+const id = await helper.createIdPackage("alsdjflasjfdlasdjflkasdjflasdjlkdjsf");
+```
+
 ## Build a single JS File
 ```
 yarn install
@@ -37,6 +54,12 @@ node test/sample-exchange.js
 
 The Exchange initializes itsself. Start it and it will create a file `exchange.json`. There you can find the Seeds used. If you do tests, save them anywhere.
 
+## Testing
+Run tests with
+
+```bash
+yarn run test
+```
 
 ## LICENSE
 All Qubic Software is licensed unter the Anti Military License: https://github.com/qubic-network/license
