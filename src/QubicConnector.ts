@@ -9,7 +9,6 @@ import { QubicPackageBuilder } from "./QubicPackageBuilder";
 import { QubicEntityRequest } from "./qubic-communication/QubicEntityRequest";
 import crypto from './crypto'
 import { KeyHelper } from "./keyHelper";
-import WebSocket from 'ws';
 
 declare function require(name: string);
 
