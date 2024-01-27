@@ -38,7 +38,7 @@ export class QubicPackageBuilder {
         });
     }
 
-    signAndDigest(seed: string): Promise<{signedData: Uint8Array, digest: Uint8Array}>  {
+    signAndDigest(seed: string): Promise<{signedData: Uint8Array, digest: Uint8Array, signature: Uint8Array}>  {
         return crypto.then(({ schnorrq, K12 }) => {
             const keyHelper = new KeyHelper();
 
@@ -49,9 +49,9 @@ export class QubicPackageBuilder {
             const toSign = this.packet.slice(0, this.offset);
 
             K12(toSign, digest, QubicDefinitions.DIGEST_LENGTH);
-            const signatur = schnorrq.sign(privateKey, publicKey, digest);
+            const signature = schnorrq.sign(privateKey, publicKey, digest);
 
-            this.packet.set(signatur, this.offset);
+            this.packet.set(signature, this.offset);
             this.offset += QubicDefinitions.SIGNATURE_LENGTH;
 
             const signedData = this.packet.slice(0, this.offset);
@@ -59,7 +59,8 @@ export class QubicPackageBuilder {
 
             return {
                 signedData: signedData,
-                digest: digest
+                digest: digest,
+                signature: signature
             };
         });
     }

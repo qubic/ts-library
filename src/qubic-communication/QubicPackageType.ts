@@ -17,8 +17,14 @@ export class QubicPackageType{
     public static REQUEST_CONTRACT_IPO = 33;
     public static RESPOND_CONTRACT_IPO = 34;
 
-    public static REQUEST_ISSUED_ASSETS = 35;
-    public static RESPOND_ISSUED_ASSETS = 36;
+    public static REQUEST_ISSUED_ASSETS = 36;
+    public static RESPOND_ISSUED_ASSETS = 37;
+
+    public static REQUEST_OWNED_ASSETS = 38;
+    public static RESPOND_OWNED_ASSETS = 39;
+
+    public static REQUEST_POSSESSED_ASSETS = 39;
+    public static RESPOND_POSSESSED_ASSETS = 40;
 
     public static PROCESS_SPECIAL_COMMAND = 255;
 }

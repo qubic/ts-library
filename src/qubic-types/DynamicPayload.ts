@@ -5,6 +5,10 @@ export class DynamicPayload {
     private filledSize: number = 0;
     private maxSize: number = 0;
 
+    /**
+     * Create a dynamic payload
+     * the maxSize should be set to the max expected size for this paload.
+     */
     constructor(maxSize: number) {
         this.bytes = new Uint8Array(maxSize).fill(0)
         this.maxSize = maxSize;

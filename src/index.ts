@@ -4,8 +4,6 @@ import { QubicDefinitions } from './QubicDefinitions';
 import { QubicHelper } from './qubicHelper';
 import { QubicPackageBuilder } from './QubicPackageBuilder';
 
-
-
 // types
 import { DynamicPayload } from './qubic-types/DynamicPayload'
 import { Long } from './qubic-types/Long'
@@ -15,6 +13,9 @@ import { QubicTickData } from './qubic-types/QubicTickData'
 import { QubicTickInfo } from './qubic-types/QubicTickInfo'
 import { QubicTransaction } from './qubic-types/QubicTransaction'
 import { Signature } from './qubic-types/Signature'
+
+// transaction Payloads
+import { QubicTransferAssetPayload } from './qubic-types/transacion-payloads/QubicTransferAssetPayload'
 
 // communication packages
 import { QubicEntityRequest } from './qubic-communication/QubicEntityRequest'
@@ -45,5 +46,6 @@ export default {
     QubicConnector,
     QubicDefinitions,
     QubicHelper,
-    QubicPackageBuilder
+    QubicPackageBuilder,
+    QubicTransferAssetPayload
 }

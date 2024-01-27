@@ -74,6 +74,12 @@ export class QubicTransaction implements IQubicBuildPackage {
         return this;
     }
 
+    public setPayload(payload: DynamicPayload): QubicTransaction {
+        this.payload = payload;
+        this.inputSize = this.payload.getPackageSize();
+        return this;
+    }
+
     private _internalSize() {
         return this.sourcePublicKey.getPackageSize()
             + this.destinationPublicKey.getPackageSize()
@@ -115,9 +121,10 @@ export class QubicTransaction implements IQubicBuildPackage {
         builder.addShort(this.inputType);
         builder.addShort(this.inputSize);
         builder.add(this.payload);
-        const { signedData, digest} =  await builder.signAndDigest(seed);
+        const { signedData, digest, signature} =  await builder.signAndDigest(seed);
         this.builtData = signedData;
         this.digest = digest;
+        this.signature = new Signature(signature)
         this.id = await new QubicHelper().getHumanReadableBytes(digest);
         return signedData;
     }

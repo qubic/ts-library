@@ -32,6 +32,8 @@ async function createTransfer(sourcePublicKey, destinationPublicKey, amount, sig
   async function main(){
     const tx = await createTransfer(sourceKey, destKey, 0, signSeed);
     
+    console.log("TX", tx);
+
     console.assert(expectedId === tx.id, "TX ID INVALID");
 
     console.log("All Tests run");
