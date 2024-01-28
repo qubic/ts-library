@@ -36,7 +36,7 @@ export class QubicTransaction implements IQubicBuildPackage {
     public inputType: number = 0;
     public inputSize: number = 0;
 
-    public payload: DynamicPayload = new DynamicPayload(QubicDefinitions.MAX_TRANSACTION_SIZE);
+    public payload: IQubicBuildPackage = new DynamicPayload(QubicDefinitions.MAX_TRANSACTION_SIZE);
     public signature: Signature = new Signature();
     
 
@@ -74,7 +74,7 @@ export class QubicTransaction implements IQubicBuildPackage {
         return this;
     }
 
-    public setPayload(payload: DynamicPayload): QubicTransaction {
+    public setPayload(payload: DynamicPayload | IQubicBuildPackage): QubicTransaction {
         this.payload = payload;
         this.inputSize = this.payload.getPackageSize();
         return this;

@@ -29,7 +29,7 @@ export class QubicTransferAssetPayload implements IQubicBuildPackage {
     private issuer: PublicKey;
     private possessor: PublicKey;
     private newOwner: PublicKey;
-    private assetName: Long;
+    private assetName: Uint8Array;
     private numberOfUnits: Long;
 
 
@@ -65,14 +65,24 @@ export class QubicTransferAssetPayload implements IQubicBuildPackage {
         return this;
     }
 
-    setAssetName(assetName: number | Long): QubicTransferAssetPayload {
-        if (typeof assetName === "number") {
-            this.assetName = new Long(assetName);
+    setAssetName(assetName: Uint8Array | string): QubicTransferAssetPayload {
+        if (typeof assetName === "string") {
+            const utf8Encode = new TextEncoder();
+            const nameBytes = utf8Encode.encode(assetName)
+            this.assetName = new Uint8Array(8);
+            nameBytes.forEach((b, i) => {
+                this.assetName[i] = b;
+            });
         }else{
-            this.assetName = <Long>assetName;
+            this.assetName = <Uint8Array>assetName;
         }
         return this;
     }
+
+    getAssetName() : Uint8Array {
+        return this.assetName;
+    }
+
 
     setNumberOfUnits(numberOfUnits: number | Long): QubicTransferAssetPayload {
         if (typeof numberOfUnits === "number") {
@@ -92,7 +102,7 @@ export class QubicTransferAssetPayload implements IQubicBuildPackage {
         builder.add(this.issuer);
         builder.add(this.possessor);
         builder.add(this.newOwner);
-        builder.add(this.assetName);
+        builder.addRaw(this.assetName);
         builder.add(this.numberOfUnits);
         return builder.getData();
     }

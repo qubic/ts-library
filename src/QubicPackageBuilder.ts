@@ -72,6 +72,10 @@ export class QubicPackageBuilder {
         return this;
     }
 
+    adduint8Array(q: Uint8Array): QubicPackageBuilder {
+        return this.addRaw(q);
+    }
+
     addRaw(q: Uint8Array): QubicPackageBuilder{
         this.packet.set(q, this.offset);
         this.offset += q.length;
