@@ -1,6 +1,6 @@
 {
   "name": "qubic-ts-library",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": "J0ET0M",
   "license": "Qubic's Anti Military License",
   "description": "Typescript Library to communicate with the Qubic Network. http://qubic.li",
