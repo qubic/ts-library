@@ -219,7 +219,8 @@ export class QubicTickData implements IQubicBuildPackage {
             console.error("URI SIZE MUST BE MAX 255");
             throw "URI SIZE MUST BE MAX 255";
         }
-        var bytes = new TextEncoder().encode(uri);
+
+        const bytes = new TextEncoder().encode(uri);
         this.unionData.set(bytes, 1);
         this.setProposalUriSize(uri.length);
     }

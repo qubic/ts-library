@@ -14,13 +14,14 @@ import { QubicPackageBuilder } from "../QubicPackageBuilder";
  */
 export class QubicTickInfo implements IQubicBuildPackage {
 
-    private _internalPackageSize = 12;
+    private _internalPackageSize = 16;
 
     private tickDuration: number = 0;
     private epoch: number = 0;
     private tick: number = 0;
     private numberOfAlignedVotes: number = 0;
     private numberOfMisalignedVotes: number = 0;
+    private initialTick: number = 0;
 
     public getTickDuration(): number {
         return this.tickDuration;
@@ -62,6 +63,15 @@ export class QubicTickInfo implements IQubicBuildPackage {
         this.numberOfMisalignedVotes = numberOfMisalignedVotes;
     }
 
+    public getInitialTick(): number {
+        return this.initialTick;
+    }
+
+    public setInitialTick(tick: number): void {
+        this.initialTick = tick;
+    }
+
+
 
     constructor(){
     }
@@ -88,6 +98,8 @@ export class QubicTickInfo implements IQubicBuildPackage {
         this.setNumberOfAlignedVotes(dataView.getInt16(offset, true));
         offset += 2;
         this.setNumberOfMisalignedVotes(dataView.getInt16(offset, true));
+        offset += 2;
+        this.setInitialTick(dataView.getInt32(offset, true));
         return this;
     }
 
@@ -98,6 +110,7 @@ export class QubicTickInfo implements IQubicBuildPackage {
         builder.addInt(this.tick);
         builder.addShort(this.numberOfAlignedVotes);
         builder.addShort(this.numberOfMisalignedVotes);
+        builder.addInt(this.initialTick);
         return builder.getData();
     }
 }
