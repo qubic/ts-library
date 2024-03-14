@@ -13,8 +13,7 @@ import { PublicKey } from "../PublicKey";
  * typedef struct
 * {
 *     uint8_t issuer[32];
-*     uint8_t possessor[32];
-*     uint8_t newOwner[32];
+*     uint8_t newOwnerAndPossessor[32];
 *     unsigned long long assetName;
 *     long long numberOfUnits;
 * } TransferAssetOwnershipAndPossession_input;
@@ -24,11 +23,10 @@ import { PublicKey } from "../PublicKey";
  */
 export class QubicTransferAssetPayload implements IQubicBuildPackage {
 
-    private _internalPackageSize = 32 + 32 + 32 + 8 + 8;
+    private _internalPackageSize = 32 + 32 + 8 + 8;
 
     private issuer: PublicKey;
-    private possessor: PublicKey;
-    private newOwner: PublicKey;
+    private newOwnerAndPossessor: PublicKey;
     private assetName: Uint8Array;
     private numberOfUnits: Long;
 
@@ -46,21 +44,13 @@ export class QubicTransferAssetPayload implements IQubicBuildPackage {
         }
         return this;
     }
+    
 
-    setPossessor(possessor: PublicKey | string): QubicTransferAssetPayload {
-        if (typeof possessor === "string") {
-            this.possessor = new PublicKey(possessor);
+    setNewOwnerAndPossessor(newOwnerAndPossessor: PublicKey | string): QubicTransferAssetPayload {
+        if (typeof newOwnerAndPossessor === "string") {
+            this.newOwnerAndPossessor = new PublicKey(newOwnerAndPossessor);
         }else{
-            this.possessor = <PublicKey>possessor;
-        }
-        return this;
-    }
-
-    setnewOwner(newOwner: PublicKey | string): QubicTransferAssetPayload {
-        if (typeof newOwner === "string") {
-            this.newOwner = new PublicKey(newOwner);
-        }else{
-            this.newOwner = <PublicKey>newOwner;
+            this.newOwnerAndPossessor = <PublicKey>newOwnerAndPossessor;
         }
         return this;
     }
@@ -100,8 +90,7 @@ export class QubicTransferAssetPayload implements IQubicBuildPackage {
     getPackageData(): Uint8Array {
         const builder = new QubicPackageBuilder(this.getPackageSize());
         builder.add(this.issuer);
-        builder.add(this.possessor);
-        builder.add(this.newOwner);
+        builder.add(this.newOwnerAndPossessor);
         builder.addRaw(this.assetName);
         builder.add(this.numberOfUnits);
         return builder.getData();
