@@ -23,7 +23,7 @@ import { PublicKey } from "../PublicKey";
  */
 export class QubicTransferAssetPayload implements IQubicBuildPackage {
 
-    private _internalPackageSize = 32 + 32 + 32 + 8 + 8;
+    private _internalPackageSize = 32 + 32 + 8 + 8;
 
     private issuer: PublicKey;
     private newOwnerAndPossessor: PublicKey;
