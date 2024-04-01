@@ -80,6 +80,10 @@ export class QubicTransaction implements IQubicBuildPackage {
         return this;
     }
 
+    public getPayload(): IQubicBuildPackage {
+        return this.payload;
+    }
+
     private _internalSize() {
         return this.sourcePublicKey.getPackageSize()
             + this.destinationPublicKey.getPackageSize()

@@ -13,4 +13,12 @@ export class QubicDefinitions {
     public static QX_ISSUE_ASSET_FEE = 1000000000; // 1b Qubic's
     public static QX_ISSUE_ASSET_INPUT_TYPE = 1; // input type for a tx to issue an asset
     public static QX_TRANSFER_ASSET_INPUT_TYPE = 2; // input type for a tx to transfer an asset
+    
+
+
+    /* QUTIL SC */
+    public static QUTIL_ADDRESS = "EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVWRF";
+    public static QUTIL_SENDMANY_INPUT_TYPE = 1; // input type for send many on Qutil
+    public static QUTIL_SENDMANY_FEE = 10; // fee in qubics for send many
+
 }

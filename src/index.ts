@@ -16,6 +16,7 @@ import { Signature } from './qubic-types/Signature'
 
 // transaction Payloads
 import { QubicTransferAssetPayload } from './qubic-types/transacion-payloads/QubicTransferAssetPayload'
+import { QubicTransferSendManyPayload } from './qubic-types/transacion-payloads/QubicTransferSendManyPayload';
 
 // communication packages
 import { QubicEntityRequest } from './qubic-communication/QubicEntityRequest'
@@ -27,6 +28,7 @@ import { RequestResponseHeader } from './qubic-communication/RequestResponseHead
 
 // crypto (base qubic library)
 import  crypto  from './crypto/index'
+
 
 export default {
     crypto,
@@ -47,5 +49,6 @@ export default {
     QubicDefinitions,
     QubicHelper,
     QubicPackageBuilder,
-    QubicTransferAssetPayload
+    QubicTransferAssetPayload,
+    QubicTransferSendManyPayload
 }

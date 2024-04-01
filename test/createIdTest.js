@@ -2,7 +2,7 @@ const { QubicHelper } = require('../dist/qubicHelper');
 
 async function main() {
 
-  const helper = new QubicHelper();
+    const helper = new QubicHelper();
 
     const seed = "wqbdupxgcaimwdsnchitjmsplzclkqokhadgehdxqogeeiovzvadstt";
     const publicId = "SUZFFQSCVPHYYBDCQODEMFAOKRJDDDIRJFFIWFLRDDJQRPKMJNOCSSKHXHGK";
