@@ -61,5 +61,13 @@ Run tests with
 yarn run test
 ```
 
+## Publish
+publish with.
+
+```bash
+yarn build
+yarn publish
+```
+
 ## LICENSE
 All Qubic Software is licensed unter the Anti Military License: https://github.com/qubic-network/license
