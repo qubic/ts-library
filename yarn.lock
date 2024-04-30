@@ -2595,14 +2595,6 @@ pure-rand@^6.0.0:
   resolved "https://registry.yarnpkg.com/pure-rand/-/pure-rand-6.0.4.tgz#50b737f6a925468679bff00ad20eade53f37d5c7"
   integrity sha512-LA0Y9kxMYv47GIPJy6MI84fqTd2HmYZI83W/kM/SkKfDlajnZYfmXFTxkbY+xSBPkLJxltMa9hIkmdc29eguMA==
 
-qubic-ts-library@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/qubic-ts-library/-/qubic-ts-library-0.1.1.tgz#284a64550214aa70ed3f3dd14ffe3b2d12ed53fc"
-  integrity sha512-han9bFUAyCMhRFcIQMN7SWltBWpvGCE9GNWprjpmYTBjac059C+9VbA8JZIx1PkOJ1+G8WFZvsXgjE1s9NHtvA==
-  dependencies:
-    bignumber.js "^9.1.2"
-    net "^1.0.2"
-
 randombytes@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/randombytes/-/randombytes-2.1.0.tgz"
