@@ -4,7 +4,6 @@ import { QubicTransaction } from "../dist/qubic-types/QubicTransaction";
 import { QubicTransferSendManyPayload } from "../dist/qubic-types/transacion-payloads/QubicTransferSendManyPayload";
 import { QubicDefinitions } from "../dist/QubicDefinitions";
 
-// Mocking the implementation of Buffer
 jest.mock("buffer", () => ({
   from: () => ({
     toString: () => "mocked-base64",
@@ -38,7 +37,6 @@ describe("Qubic Transaction Creation", () => {
 });
 
 /**
- * Function to create a send many transfer
  *
  * @param sourcePublicKey
  * @param signSeed
@@ -50,7 +48,6 @@ async function createSendManyTransfer(
 ): Promise<QubicTransaction> {
   const sendManyPayload = new QubicTransferSendManyPayload();
 
-  // Add a destination
   sendManyPayload.addTransfer({
     destId: new PublicKey(
       "SUZFFQSCVPHYYBDCQODEMFAOKRJDDDIRJFFIWFLRDDJQRPKMJNOCSSKHXHGK"
@@ -58,7 +55,6 @@ async function createSendManyTransfer(
     amount: new Long(222314422),
   });
 
-  // Add another destination
   sendManyPayload.addTransfer({
     destId: new PublicKey(
       "SUZFFQSCVPHYYBDCQODEMFAOKRJDDDIRJFFIWFLRDDJQRPKMJNOCSSKHXHGK"
@@ -66,17 +62,14 @@ async function createSendManyTransfer(
     amount: new Long(323214525),
   });
 
-  // Add the fixed fee to the total amount
   const totalAmount =
     sendManyPayload.getTotalAmount() +
     BigInt(QubicDefinitions.QUTIL_SENDMANY_FEE);
 
-  // Build and sign transaction
   const tx = new QubicTransaction()
     .setSourcePublicKey(sourcePublicKey)
-    .setDestinationPublicKey(QubicDefinitions.QUTIL_ADDRESS) // a transfer should go the Qutil SC
+    .setDestinationPublicKey(QubicDefinitions.QUTIL_ADDRESS)
     .setAmount(totalAmount)
-    .setTick(0) // just a fake tick
     .setInputType(QubicDefinitions.QUTIL_SENDMANY_INPUT_TYPE)
     .setInputSize(sendManyPayload.getPackageSize())
     .setPayload(sendManyPayload);
