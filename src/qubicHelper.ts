@@ -344,13 +344,32 @@ export class QubicHelper {
         });
     }
 
-    private getIncreasingNonceAndCommandType(type: number): Uint8Array {
-        let timestamp = Math.floor(Date.now() / 1000);
-        const byteArray = new Uint8Array(8);
+    // todo: remove on next update
+    // private getIncreasingNonceAndCommandType(type: number): Uint8Array {
+    //     let timestamp = Math.floor(Date.now() / 1000);
+    //     const byteArray = new Uint8Array(8);
 
+    //     const txView = new DataView(byteArray.buffer);
+    //     txView.setUint32(0, timestamp, true);
+    //     byteArray[7] = type;
+    //     return byteArray;
+    // }
+
+    /**
+     * 
+     * implementation aligned with qubic-cli
+     * 
+     * @param type 
+     * @returns 
+     */
+    private getIncreasingNonceAndCommandType(type: number): Uint8Array {
+        const timestamp: bigint = BigInt(Math.floor(Date.now() / 1000));
+        const commandByte: bigint = BigInt(type) << BigInt(56);
+        const result = commandByte | timestamp;
+
+        const byteArray = new Uint8Array(8);
         const txView = new DataView(byteArray.buffer);
-        txView.setUint32(0, timestamp, true);
-        byteArray[7] = type;
+        txView.setBigUint64(0, result, true);
         return byteArray;
     }
 
