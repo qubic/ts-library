@@ -1,9 +1,14 @@
-import * as chai from 'chai';
+import { QubicTickData } from "../dist/qubic-types/QubicTickData";
 
-const expect = chai.expect;
-describe('Parse a TickData Package', () => {
+describe("QubicTickData", () => {
+  let tickData: QubicTickData;
 
-  it('should be able to convert binary to TickData Object' , () => {
+  beforeEach(() => {
+    tickData = new QubicTickData();
   });
 
+  it("should parse package data correctly", () => {
+    const mockPackageData = new Uint8Array(41328);
+    tickData.parse(mockPackageData);
+  });
 });

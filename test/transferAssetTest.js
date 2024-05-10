@@ -1,9 +1,5 @@
 const { PublicKey } = require('../dist/qubic-types/PublicKey');
-const { QubicPackageType } = require('../dist/qubic-communication/QubicPackageType');
-const { Long } = require('../dist/qubic-types/Long');
 const { QubicTransaction } = require('../dist/qubic-types/QubicTransaction');
-const { RequestResponseHeader } = require('../dist/qubic-communication/RequestResponseHeader');
-const { QubicPackageBuilder } = require('../dist/QubicPackageBuilder');
 const { QubicDefinitions } = require('../dist/QubicDefinitions');
 const { QubicTransferAssetPayload } = require('../dist/qubic-types/transacion-payloads/QubicTransferAssetPayload');
 
@@ -13,7 +9,6 @@ async function createAssetTransfer(sourcePublicKey, assetName, numberOfUnits, si
 
   const assetTransfer = new QubicTransferAssetPayload()
     .setIssuer(sourcePublicKey)
-    .setPossessor(sourcePublicKey)
     .setNewOwnerAndPossessor(sourcePublicKey)
     .setAssetName(assetName)
     .setNumberOfUnits(numberOfUnits);
