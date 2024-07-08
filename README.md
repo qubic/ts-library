@@ -6,7 +6,7 @@ A TS Library to communicate with the Qubic Network.
 Install via NPM.
 
 ```bash
-yarn add qubic-ts-library
+yarn add @qubic-lib/qubic-ts-library
 ```
 
 ### TS Examples
@@ -66,7 +66,7 @@ publish with.
 
 ```bash
 yarn build
-yarn publish
+yarn publish --access public
 ```
 
 ## LICENSE
