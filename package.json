@@ -16,7 +16,7 @@
     "/dist"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc & jest",
     "test": "jest",
     "publish": "npm publish"
   },
@@ -35,6 +35,8 @@
   },
   "dependencies": {
     "bignumber.js": "^9.1.2",
-    "net": "^1.0.2"
+    "net": "^1.0.2",
+    "node-fetch": "^3.3.2",
+    "qubic-ts-library": "^0.1.1"
   }
 }
