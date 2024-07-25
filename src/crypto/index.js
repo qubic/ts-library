@@ -21,6 +21,27 @@ const allocU16 = function (l, v) {
 };
 
 /**
+ * Create a random number between 0 and 1 using a secure random number generator.
+ * @returns {number} Random number between 0 and 1
+ */
+const random = function () {
+  if (typeof window !== 'undefined' && window.crypto && window.crypto.getRandomValues) {
+    // Browser environment
+    const array = new Uint32Array(1);
+    window.crypto.getRandomValues(array);
+    return array[0] / (0xFFFFFFFF + 1);
+  } else if (typeof require !== 'undefined') {
+    // Node.js environment
+    const crypto = require('crypto');
+    const buffer = crypto.randomBytes(4);
+    const randomInt = buffer.readUInt32BE(0);
+    return randomInt / (0xFFFFFFFF + 1);
+  } else {
+    throw new Error('No secure random number generator available.');
+  }
+}
+
+/**
  * @namespace Crypto
  */
 
@@ -199,6 +220,7 @@ const crypto = new Promise(function (resolve) {
       K12,
       keccakP160012,
       KECCAK_STATE_LENGTH: 200,
+      secRnd: random,
     });
   };
 });
@@ -211,5 +233,6 @@ export const PUBLIC_KEY_LENGTH = 32;
 export const DIGEST_LENGTH = 32;
 export const NONCE_LENGTH = 32;
 export const CHECKSUM_LENGTH = 3;
+export const secRnd = random;
 
 export default crypto;
