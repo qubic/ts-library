@@ -375,7 +375,7 @@ export class QubicHelper {
 
     public async createProposal(protocol: number, computorIndex: number, operatorSeed: string, url: string): Promise<Uint8Array> {
 
-        return crypto.then(({ schnorrq, K12 }) => {
+        return crypto.then(({ schnorrq, K12, secRnd }) => {
 
             // operator
             const operatorPrivateKey = this.privateKey(operatorSeed, 0, K12);
@@ -405,9 +405,9 @@ export class QubicHelper {
             offset++;
 
             // byte[3] dejavu (we let it empty)
-            proposal[offset++] = Math.floor(Math.random() * 255);
-            proposal[offset++] = Math.floor(Math.random() * 255);
-            proposal[offset++] = Math.floor(Math.random() * 255);
+            proposal[offset++] = Math.floor(secRnd() * 255);
+            proposal[offset++] = Math.floor(secRnd() * 255);
+            proposal[offset++] = Math.floor(secRnd() * 255);
 
             // byte type deprecated
             proposal[offset] = this.PROCESS_SPECIAL_COMMAND;
@@ -488,7 +488,7 @@ export class QubicHelper {
 
     public async createBallotRequests(protocol: number, operatorSeed: string, computorIndices: number[], votes: number[]): Promise<Uint8Array[]> {
 
-        return crypto.then(({ schnorrq, K12 }) => {
+        return crypto.then(({ schnorrq, K12, secRnd }) => {
 
             const output: Uint8Array[] = [];
 
@@ -515,9 +515,9 @@ export class QubicHelper {
                 offset++;
 
                 // byte[3] dejavu (we let it empty)
-                proposal[offset++] = Math.floor(Math.random() * 255);
-                proposal[offset++] = Math.floor(Math.random() * 255);
-                proposal[offset++] = Math.floor(Math.random() * 255);
+                proposal[offset++] = Math.floor(secRnd() * 255);
+                proposal[offset++] = Math.floor(secRnd() * 255);
+                proposal[offset++] = Math.floor(secRnd() * 255);
 
                 // byte type (depcrecated)
                 proposal[offset] = this.PROCESS_SPECIAL_COMMAND;
