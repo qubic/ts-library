@@ -6,7 +6,7 @@ const baseURL = "https://rpc.qubic.org"
 
 const QUTIL_ADDRESS = "EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVWRF"
 
-const depositAccount = "CVSOVQEACGSGMDKLARNMMAJPHQYBKLYXQFTQJDBSHGBBVLHVYVMLRZHBTTRF"
+const depositAccount = "YOURIDENTITY"
 
 
 function handleDeposit(senderID, transactionID, amount, sendMany) {
@@ -57,9 +57,7 @@ async function fetchSendManyTransaction(transactionID) {
 async function main() {
 
     // Fetch latest tick
-    let latestTick = await fetchLatestTick()
-
-    latestTick = 16060765
+    const latestTick = await fetchLatestTick()
 
     // Fetch transactions
     const transactions = await fetchTickTransactions(latestTick)
