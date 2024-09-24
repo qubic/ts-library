@@ -5,7 +5,6 @@ import { Long } from "./Long";
 import { QubicPackageBuilder } from "../QubicPackageBuilder";
 import { PublicKey } from "./PublicKey";
 import { QubicDefinitions } from "../QubicDefinitions";
-import { RequestResponseHeader } from "../qubic-communication/RequestResponseHeader";
 import { Signature } from "./Signature";
 
 /**
@@ -131,6 +130,16 @@ export class QubicTransaction implements IQubicBuildPackage {
         this.signature = new Signature(signature)
         this.id = await new QubicHelper().getHumanReadableBytes(digest);
         return signedData;
+    }
+
+    /**
+     * The result of build() must be passed through this function,
+     * as the `broadcast-transaction` endpoint expects the transaction to be Base64 encoded.
+     */
+    encodeTransactionToBase64(transaction: Uint8Array): string {
+        const byteArray = new Uint8Array(transaction);
+        const str = String.fromCharCode.apply(null, byteArray);
+        return btoa(str);
     }
 
     getPackageData(): Uint8Array {
