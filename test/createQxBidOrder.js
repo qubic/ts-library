@@ -1,11 +1,7 @@
 import {QubicTransferQXOrderPayload} from "../dist/qubic-types/transacion-payloads/QubicTransferQXOrderPayload.js";
-
 import {PublicKey} from "../dist/qubic-types/PublicKey.js";
-
 import {Long} from "../dist/qubic-types/Long.js";
-
 import {QubicTransaction} from "../dist/qubic-types/QubicTransaction.js";
-
 import {QubicDefinitions} from "../dist/QubicDefinitions.js";
 
 
