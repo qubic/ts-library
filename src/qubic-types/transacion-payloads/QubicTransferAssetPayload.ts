@@ -4,7 +4,7 @@ import { DynamicPayload } from "../DynamicPayload";
 import { IQubicBuildPackage } from "../IQubicBuildPackage";
 import { Long } from "../Long";
 import { PublicKey } from "../PublicKey";
-
+import { QubicHelper } from "../../qubicHelper";
 
 /**
  * 
@@ -39,17 +39,17 @@ export class QubicTransferAssetPayload implements IQubicBuildPackage {
     setIssuer(issuer: PublicKey | string): QubicTransferAssetPayload {
         if (typeof issuer === "string") {
             this.issuer = new PublicKey(issuer);
-        }else{
+        } else {
             this.issuer = <PublicKey>issuer;
         }
         return this;
     }
-    
+
 
     setNewOwnerAndPossessor(newOwnerAndPossessor: PublicKey | string): QubicTransferAssetPayload {
         if (typeof newOwnerAndPossessor === "string") {
             this.newOwnerAndPossessor = new PublicKey(newOwnerAndPossessor);
-        }else{
+        } else {
             this.newOwnerAndPossessor = <PublicKey>newOwnerAndPossessor;
         }
         return this;
@@ -63,13 +63,13 @@ export class QubicTransferAssetPayload implements IQubicBuildPackage {
             nameBytes.forEach((b, i) => {
                 this.assetName[i] = b;
             });
-        }else{
+        } else {
             this.assetName = <Uint8Array>assetName;
         }
         return this;
     }
 
-    getAssetName() : Uint8Array {
+    getAssetName(): Uint8Array {
         return this.assetName;
     }
 
@@ -77,7 +77,7 @@ export class QubicTransferAssetPayload implements IQubicBuildPackage {
     setNumberOfUnits(numberOfUnits: number | Long): QubicTransferAssetPayload {
         if (typeof numberOfUnits === "number") {
             this.numberOfUnits = new Long(numberOfUnits);
-        }else{
+        } else {
             this.numberOfUnits = <Long>numberOfUnits;
         }
         return this;
@@ -101,4 +101,46 @@ export class QubicTransferAssetPayload implements IQubicBuildPackage {
         payload.setPayload(this.getPackageData());
         return payload;
     }
+
+    async parse(data: Uint8Array): Promise<QubicTransferAssetPayload> {
+        if (data.length !== this._internalPackageSize) {
+            console.error("INVALID PACKAGE SIZE");
+            return undefined;
+        }
+
+        const helper = new QubicHelper();
+
+        let start = 0;
+        let end = 32; // size for issuer and newOwnerAndPossessor
+
+        this.issuer = new PublicKey(await helper.getIdentity(data.slice(start, end)));
+
+        start = end;
+        end = start + 32; // size for newOwnerAndPossessor
+        this.newOwnerAndPossessor = new PublicKey(await helper.getIdentity(data.slice(start, end)));
+
+        start = end;
+        end = start + 8; // size for asset name
+        this.assetName = data.slice(start, end);
+
+        let decoder = new TextDecoder(); // Create a TextDecoder for UTF-8 by default
+        const result = decoder.decode(this.assetName); // Convert Uint8Array to string
+
+        start = end;
+        end = start + 8; // size for asset name
+
+        const amount = Number(
+            this.uint8ArrayToBigInt(data.slice(start, end)) as any
+        );
+        this.numberOfUnits = new Long(amount);
+
+        return this;
+    }
+
+    uint8ArrayToBigInt(bytes: Uint8Array): bigint {
+        // Initialize result as BigInt
+        const view = new DataView(bytes.buffer, 0);
+        return view.getBigUint64(0, true);
+    }
+
 }

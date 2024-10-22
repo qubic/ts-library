@@ -41,10 +41,27 @@ async function main() {
   expect(tx.id).toBe(expectedId);
 }
 
+async function parseAssetTransferPayload() {
+
+
+  const inputHex = "0830bb63bf7d5e164ac8cbd38680630ff7670a1ebf39f7210b40bcdca253d05f9c63048ada9c009877ee2a0aecd6221a94078c462ddde2dce4f41463052cf7af434642000000000000286bee00000000";
+  const binaryData = new Uint8Array(inputHex.match(/.{1,2}/g)?.map((pair) => parseInt(pair, 16)) ?? []);
+
+  const parsedPayload = await new QubicTransferAssetPayload().parse(binaryData);
+
+  expect(parsedPayload.issuer.getIdentityAsSring()).toBe("CFBMEMZOIDEXQAUXYYSZIURADQLAPWPMNJXQSNVQZAHYVOPYUKKJBJUCTVJL");
+  expect(parsedPayload.newOwnerAndPossessor.getIdentityAsSring()).toBe("QAZFCTNGZJEUKEXCFHWMETVYCTTAKVGUHUEFLONUKGGVXKLKUVGEQWCFWVWE");
+
+  let decoder = new TextDecoder(); // Create a TextDecoder for UTF-8 by default
+  let assetName = decoder.decode(parsedPayload.assetName); // Convert Uint8Array to string
+  assetName = assetName.replace(/\0/g, '');  // Remove null characters
+
+  expect(assetName).toBe("CFB");
+  expect(parsedPayload.numberOfUnits.getNumber()).toBe(4000000000n);
+}
+
 test('Create and Sign Asset Transfer Package', async () => {
-
   main();
-
 });
 
 test('Convert assetName to byte array', async () => {
@@ -70,5 +87,11 @@ test('Convert assetName to byte array', async () => {
   });
 
   expect(isEqual).toBe(true);
+
+});
+
+test('Parse Asset Transfer Payload', async () => {
+
+  parseAssetTransferPayload();
 
 });
