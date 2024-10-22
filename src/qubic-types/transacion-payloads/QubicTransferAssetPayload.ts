@@ -129,18 +129,9 @@ export class QubicTransferAssetPayload implements IQubicBuildPackage {
         start = end;
         end = start + 8; // size for asset name
 
-        const amount = Number(
-            this.uint8ArrayToBigInt(data.slice(start, end)) as any
-        );
-        this.numberOfUnits = new Long(amount);
+        this.numberOfUnits = new Long(data.slice(start, end));
 
         return this;
-    }
-
-    uint8ArrayToBigInt(bytes: Uint8Array): bigint {
-        // Initialize result as BigInt
-        const view = new DataView(bytes.buffer, 0);
-        return view.getBigUint64(0, true);
     }
 
 }

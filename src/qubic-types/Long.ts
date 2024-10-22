@@ -3,15 +3,18 @@ import { IQubicBuildPackage } from "./IQubicBuildPackage";
 export class Long implements IQubicBuildPackage {
     private value: bigint = BigInt(0);
 
-    constructor(initialValue: number | bigint | undefined = 0){
-        if(typeof initialValue === "number"){
+    constructor(initialValue: number | bigint | Uint8Array | undefined = 0) {
+        if (typeof initialValue === "number") {
             this.setNumber(initialValue);
-        }else if(initialValue !== undefined){
+        } else if (initialValue instanceof Uint8Array) {
+            const view = new DataView(initialValue.buffer, 0);
+            this.setNumber(view.getBigUint64(0, true));
+        } else if (initialValue !== undefined) {
             this.setNumber(initialValue);
         }
     }
-    setNumber(n: number | bigint){
-        if(typeof n === "number")
+    setNumber(n: number | bigint) {
+        if (typeof n === "number")
             this.value = BigInt(n);
         else
             this.value = n;
@@ -31,5 +34,5 @@ export class Long implements IQubicBuildPackage {
         return new Uint8Array(buffer);
     }
 
-    
+
 }

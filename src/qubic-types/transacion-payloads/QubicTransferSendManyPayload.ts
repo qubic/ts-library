@@ -24,7 +24,7 @@ export class QubicTransferSendManyPayload implements IQubicBuildPackage {
   // max 25 transfers allowed
   private sendManyTransfers: SendManyTransfer[] = [];
 
-  constructor() {}
+  constructor() { }
 
   addTransfer(transfer: SendManyTransfer): QubicTransferSendManyPayload {
     if (this.sendManyTransfers.length < 25) {
@@ -49,8 +49,7 @@ export class QubicTransferSendManyPayload implements IQubicBuildPackage {
    * 
    * @returns the transfers for this send many request
    */
-  getTransfers(): SendManyTransfer[]
-  {
+  getTransfers(): SendManyTransfer[] {
     return this.sendManyTransfers;
   }
 
@@ -124,14 +123,12 @@ export class QubicTransferSendManyPayload implements IQubicBuildPackage {
     // a send many tx can have maximum 25 recipients
     for (let i = 0; i < 25; i++) {
       // get the amount for the transfer
-      const amount = Number(
-        this.uint8ArrayToBigInt(data.slice(800 + i * 8, 800 + i * 8 + 8)) as any
-      );
+      const amount = new Long(data.slice(800 + i * 8, 800 + i * 8 + 8));
       // only add transfer to output array if amount > 0; 0 or lower means, no transfer
-      if (amount > 0) {
+      if (amount.getNumber() > 0) {
         const dest = data.slice(32 * i, 32 * i + 32);
         this.sendManyTransfers.push({
-          amount: new Long(amount),
+          amount: amount,
           destId: new PublicKey(await helper.getIdentity(dest)),
         });
       }
@@ -140,12 +137,6 @@ export class QubicTransferSendManyPayload implements IQubicBuildPackage {
     this.addTranfers(sendManyTransfers);
 
     return this;
-  }
-
-  uint8ArrayToBigInt(bytes: Uint8Array): bigint {
-    // Initialize result as BigInt
-    const view = new DataView(bytes.buffer, 0);
-    return view.getBigUint64(0, true);
   }
 }
 
