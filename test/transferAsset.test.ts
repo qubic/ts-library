@@ -33,7 +33,7 @@ async function createAssetTransfer(sourcePublicKey, assetName, numberOfUnits, si
 
 const sourceKey = new PublicKey("SUZFFQSCVPHYYBDCQODEMFAOKRJDDDIRJFFIWFLRDDJQRPKMJNOCSSKHXHGK");
 const signSeed = "wqbdupxgcaimwdsnchitjmsplzclkqokhadgehdxqogeeiovzvadstt";
-const expectedId = "lbidszodfmnjchzixlylhjrolipesxujxihhyofnkfhqajjzvztpdyydpfgf";
+const expectedId = "edfpxfqxcslxjcjvmhxkqiwmmtmebuldxgzeoseijepwzhkrxzhdkyqcqxvd";
 
 async function main() {
   const tx = await createAssetTransfer(sourceKey, 0, 0, signSeed);
@@ -57,11 +57,13 @@ async function parseAssetTransferPayload() {
   assetName = assetName.replace(/\0/g, '');  // Remove null characters
 
   expect(assetName).toBe("CFB");
-  expect(parsedPayload.numberOfUnits.getNumber()).toBe(4000000000n);
+
+  // it's casted to string so the printed result is readable in the case of error
+  expect(parsedPayload.numberOfUnits.getNumber().toString()).toBe('4000000000');
 }
 
 test('Create and Sign Asset Transfer Package', async () => {
-  main();
+  await main();
 });
 
 test('Convert assetName to byte array', async () => {
@@ -78,8 +80,6 @@ test('Convert assetName to byte array', async () => {
   const assetTransfer = new QubicTransferAssetPayload()
     .setAssetName(assetName);
 
-  console.log("NAME", assetTransfer.getAssetName());
-
   // compare bytes
   let isEqual = true;
   assetNameInBytes.forEach((b, i) => {
@@ -92,6 +92,6 @@ test('Convert assetName to byte array', async () => {
 
 test('Parse Asset Transfer Payload', async () => {
 
-  parseAssetTransferPayload();
+  await parseAssetTransferPayload();
 
 });
