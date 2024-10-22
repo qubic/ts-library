@@ -127,7 +127,7 @@ export class QubicTransferAssetPayload implements IQubicBuildPackage {
         const result = decoder.decode(this.assetName); // Convert Uint8Array to string
 
         start = end;
-        end = start + 8; // size for asset name
+        end = start + 8; // size for number of units
 
         this.numberOfUnits = new Long(data.slice(start, end));
 
