@@ -21,7 +21,6 @@ async function createAssetTransfer(sourcePublicKey, assetName, numberOfUnits, si
   // Create a new asset transfer payload and set its properties
   const assetTransfer = new QubicTransferAssetPayload()
     .setIssuer(sourcePublicKey)
-    .setPossessor(sourcePublicKey)
     .setNewOwnerAndPossessor(sourcePublicKey)
     .setAssetName(assetName)
     .setNumberOfUnits(numberOfUnits);
