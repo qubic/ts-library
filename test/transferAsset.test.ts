@@ -9,8 +9,6 @@ const { QubicTransferAssetPayload } = require('../dist/qubic-types/transacion-pa
 
 
 async function createAssetTransfer(sourcePublicKey, assetName, numberOfUnits, signSeed) {
-
-
   const assetTransfer = new QubicTransferAssetPayload()
     .setIssuer(sourcePublicKey)
     .setNewOwnerAndPossessor(sourcePublicKey)
@@ -42,15 +40,13 @@ async function main() {
 }
 
 async function parseAssetTransferPayload() {
-
-
   const inputHex = "0830bb63bf7d5e164ac8cbd38680630ff7670a1ebf39f7210b40bcdca253d05f9c63048ada9c009877ee2a0aecd6221a94078c462ddde2dce4f41463052cf7af434642000000000000286bee00000000";
   const binaryData = new Uint8Array(inputHex.match(/.{1,2}/g)?.map((pair) => parseInt(pair, 16)) ?? []);
 
   const parsedPayload = await new QubicTransferAssetPayload().parse(binaryData);
 
-  expect(parsedPayload.issuer.getIdentityAsSring()).toBe("CFBMEMZOIDEXQAUXYYSZIURADQLAPWPMNJXQSNVQZAHYVOPYUKKJBJUCTVJL");
-  expect(parsedPayload.newOwnerAndPossessor.getIdentityAsSring()).toBe("QAZFCTNGZJEUKEXCFHWMETVYCTTAKVGUHUEFLONUKGGVXKLKUVGEQWCFWVWE");
+  expect(parsedPayload.getIssuer().getIdentityAsSring()).toBe("CFBMEMZOIDEXQAUXYYSZIURADQLAPWPMNJXQSNVQZAHYVOPYUKKJBJUCTVJL");
+  expect(parsedPayload.getNewOwnerAndPossessor().getIdentityAsSring()).toBe("QAZFCTNGZJEUKEXCFHWMETVYCTTAKVGUHUEFLONUKGGVXKLKUVGEQWCFWVWE");
 
   let decoder = new TextDecoder(); // Create a TextDecoder for UTF-8 by default
   let assetName = decoder.decode(parsedPayload.assetName); // Convert Uint8Array to string
@@ -59,7 +55,7 @@ async function parseAssetTransferPayload() {
   expect(assetName).toBe("CFB");
 
   // it's casted to string so the printed result is readable in the case of error
-  expect(parsedPayload.numberOfUnits.getNumber().toString()).toBe('4000000000');
+  expect(parsedPayload.getNumberOfUnits().getNumber().toString()).toBe('4000000000');
 }
 
 test('Create and Sign Asset Transfer Package', async () => {
