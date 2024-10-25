@@ -73,6 +73,17 @@ export class QubicTransferAssetPayload implements IQubicBuildPackage {
         return this.assetName;
     }
 
+    getIssuer(): PublicKey {
+        return this.issuer;
+    }
+
+    getNewOwnerAndPossessor(): PublicKey {
+        return this.newOwnerAndPossessor;
+    }
+
+    getNumberOfUnits(): Long {
+        return this.numberOfUnits;
+    }
 
     setNumberOfUnits(numberOfUnits: number | Long): QubicTransferAssetPayload {
         if (typeof numberOfUnits === "number") {
