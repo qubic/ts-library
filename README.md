@@ -6,6 +6,8 @@ A TS Library to communicate with the Qubic Network.
 
 The Qubic Typescript Library is designed to facilitate communication with the Qubic Network. It provides various utilities and classes to interact with the network, manage cryptographic operations, and handle data structures specific to Qubic.
 
+[Qubic TS Library on NPM](https://www.npmjs.com/package/@qubic-lib/qubic-ts-library)
+
 ## Installation
 
 Install via NPM.
