@@ -25,6 +25,8 @@ To use the library, you need to import the necessary classes and functions. Belo
 // import helper
 import { QubicHelper } from 'qubic-ts-library/dist/qubicHelper'
 
+// QubicHelper is class
+const helper = new QubicHelper();
 // create an id Package with private/public key and human readable address
 const id = await helper.createIdPackage("alsdjflasjfdlasdjflkasdjflasdjlkdjsf");
 ```
