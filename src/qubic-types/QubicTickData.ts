@@ -263,14 +263,14 @@ export class QubicTickData implements IQubicBuildPackage {
         this.setMonth(data[offset++]);
         this.setYear(data[offset++]);
 
-        this.setUnionData(data.slice(offset, 256));
+        this.setUnionData(data.slice(offset, offset + 256));
         offset += 256;
 
-        this.setTimeLock(data.slice(offset, 32));
+        this.setTimeLock(data.slice(offset, offset + 32));
         offset += 32;
 
 
-        this.setTransactionDigests(data.slice(offset, QubicDefinitions.NUMBER_OF_TRANSACTIONS_PER_TICK * QubicDefinitions.DIGEST_LENGTH));
+        this.setTransactionDigests(data.slice(offset, offset + QubicDefinitions.NUMBER_OF_TRANSACTIONS_PER_TICK * QubicDefinitions.DIGEST_LENGTH));
         offset += QubicDefinitions.NUMBER_OF_TRANSACTIONS_PER_TICK * QubicDefinitions.DIGEST_LENGTH;
 
         const contractFees = [];
@@ -280,7 +280,7 @@ export class QubicTickData implements IQubicBuildPackage {
         }
         this.setContractFees(contractFees);
 
-        this.setSignature(new Signature(data.slice(offset, QubicDefinitions.SIGNATURE_LENGTH)));
+        this.setSignature(new Signature(data.slice(offset, offset + QubicDefinitions.SIGNATURE_LENGTH)));
         offset += QubicDefinitions.SIGNATURE_LENGTH;
         
         return this;
