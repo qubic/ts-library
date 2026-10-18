@@ -10,7 +10,7 @@ import { QubicEntityRequest } from "./qubic-communication/QubicEntityRequest";
 import crypto from './crypto'
 import { KeyHelper } from "./keyHelper";
 
-export class QubicConnector {
+export class QubicConnectorNode {
 
     private PORT = 21841;
 
@@ -32,9 +32,9 @@ export class QubicConnector {
     public onPackageReceived?: (packet: ReceivedPackage) => void
     public onSocketError?: (packet: any) => void
 
-    constructor() {
+    constructor(PORT = 21841) {
         this.socket = new net.Socket();
-
+        this.PORT = PORT;
         if (this.socket) {
             this.socket.on('data', (d: any) => {
                 this.writeBuffer(d);
@@ -56,6 +56,7 @@ export class QubicConnector {
         if (this.onPeerConnected)
             this.onPeerConnected();
     }
+
     private toBase64(u8: any): string {
         return btoa(String.fromCharCode.apply(null, u8));
     }

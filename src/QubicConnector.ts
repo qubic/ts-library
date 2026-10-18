@@ -40,8 +40,9 @@ export class QubicConnector {
     public onTick?: (tick: number) => void
     public onPackageReceived?: (packet: ReceivedPackage) => void
 
-    constructor(bridgeAddress) {
+    constructor(bridgeAddress, PORT = 21841) {
         this.isNodeJs = this.isNodeJsCheck();
+        this.PORT = PORT;
         if (!this.isNodeJs) {
             this.webSocket = new WebSocket(bridgeAddress || 'wss://webbridge.qubic.li/'); // qli web bridge address
         } else {

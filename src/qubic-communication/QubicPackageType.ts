@@ -26,5 +26,8 @@ export class QubicPackageType{
     public static REQUEST_POSSESSED_ASSETS = 39;
     public static RESPOND_POSSESSED_ASSETS = 40;
 
+    public static RequestContractFunction = 42;
+    public static RespondContractFunction = 43;
+
     public static PROCESS_SPECIAL_COMMAND = 255;
 }
