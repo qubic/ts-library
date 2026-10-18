@@ -10,6 +10,7 @@ const { QubicTransaction } = require('../dist/qubic-types/QubicTransaction');
 const { RequestResponseHeader } = require('../dist/qubic-communication/RequestResponseHeader');
 const { QubicPackageBuilder } = require('../dist/QubicPackageBuilder');
 const fs = require("fs");
+const crypto = require("crypto");
 
 
 /***
@@ -216,15 +217,17 @@ class QubicExchange {
   /**
    * generates a new seed
    * 
+   * the seed is the private key: always use a cryptographically secure
+   * random source here, never Math.random()
+   * 
    * @returns 
    * 
    */
   seedGen() {
     const letters = "abcdefghijklmnopqrstuvwxyz";
-    const letterSize = letters.length;
     let seed = "";
     for (let i = 0; i < 55; i++) {
-      seed += letters[Math.floor(Math.random() * letterSize)];
+      seed += letters[crypto.randomInt(letters.length)];
     }
     return seed;
   }
